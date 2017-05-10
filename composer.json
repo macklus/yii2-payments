@@ -1,0 +1,21 @@
+{
+    "name": "macklus/yii2-payments",
+    "description": "Simple payment environment for Yii2. It includes Transfer, Paypal and Credit Card systems",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension","payments","paypal","tpv","ceca","credit card","transfer"],
+    "license": "GPL-3.0+",
+    "authors": [
+        {
+            "name": "José Pedro Andrés",
+            "email": "macklus@debianitas.net"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "macklus\\payments\\": ""
+        }
+    }
+}

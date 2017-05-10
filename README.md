@@ -25,7 +25,53 @@ to the require section of your `composer.json` file.
 Usage
 -----
 
-Once the extension is installed, simply use it in your code by  :
+Once the extension is installed, you should define their config, by define a payments component on your web.php, like:
 
 ```php
-<?= \macklus\payments\AutoloadExample::widget(); ?>```
+'components' => [
+    'payments' => [
+        'dev' => [
+            'paypal' => [
+                'live' => false,
+                'debug' => true,
+                'action' => 'https://www.paypal.com/cgi-bin/webscr',
+                'bussines' => 'HERE YOUR PAYPAL ACCOUNTS',
+                'notify_url' => '/payments/paypal',
+                'url_ok' => '',
+                'url_ko' => ''
+            ],
+            'transfer' => [
+                'account' => '',
+                'name' => '',
+                'email' => '',
+            ],
+           'redsys' => [
+                'urlPago' => "https://sis-t.redsys.es:25443/sis/realizarPago",
+                'key' => 'HERE YOUR KEY',
+                'merchant' => "HERE YOUR MERCHANT",
+            ],
+        ],
+        'prod' => [
+            'paypal' => [
+                'live' => true,
+                'debug' => false,
+                'action' => 'https://www.paypal.com/cgi-bin/webscr',
+                'bussines' => 'HERE YOUR PAYPAL ACCOUNT',
+                'notify_url' => '/payments/paypal',
+                'url_ok' => '',
+                'url_ko' => ''
+            ],
+            'transfer' => [
+                'account' => '',
+                'name' => '',
+                'email' => '',
+             ],
+             'redsys' => [
+                'urlPago' => "https://sis.redsys.es/sis/realizarPago",
+                'key' => "HERE YOUR KEY",
+                'merchant' => "HERE YOUR MERCHANT",
+             ],
+        ],
+    ],
+],
+```

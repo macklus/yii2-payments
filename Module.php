@@ -33,7 +33,7 @@ class Module extends BaseModule {
 
     /** @var array The rules to be used in URL management. */
     public $urlRules = [
-        '<action:(paypal|credit)>' => 'payment/<action>',
+        'paypal' => 'paypal/response',
     ];
 
 }

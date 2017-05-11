@@ -4,7 +4,7 @@ namespace macklus\payments\interfaces;
 
 interface PaymentMethodInterface {
 
-    public function configure($data = []);
+    public function configure($mod);
 
     public function setParameter($key, $value);
 

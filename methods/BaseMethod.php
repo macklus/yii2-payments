@@ -2,11 +2,13 @@
 
 namespace macklus\payments\methods;
 
+use Yii;
 use macklus\payments\interfaces\PaymentMethodInterface;
 
 Class BaseMethod implements PaymentMethodInterface {
 
     public $amount;
+    public $viewPath;
     public $currency = 'EUR';
     protected $item = false;
     protected $_config;
@@ -14,11 +16,12 @@ Class BaseMethod implements PaymentMethodInterface {
     protected $_required_vars = [];
 
     public function __construct() {
-        
+        $this->viewPath = Yii::getAlias('@macklus/payments/views');
     }
 
-    public function configure($data = []) {
-        foreach ($data as $key => $value) {
+    public function configure($mod) {
+        $conf = Yii::$app->getModule('payments')->getMod($mod);
+        foreach ($conf as $key => $value) {
             $this->setParameter($key, $value);
         }
     }
@@ -85,6 +88,15 @@ Class BaseMethod implements PaymentMethodInterface {
             array_push($errors, 'Item is required');
         }
         return $errors;
+    }
+
+    public function renderForm($file, $extra_params = []) {
+        $params = [
+            'payment' => $this,
+        ];
+        $params = array_merge($params, $extra_params);
+
+        return Yii::$app->view->renderFile($this->viewPath . '/' . $file . '.php', $params);
     }
 
 }

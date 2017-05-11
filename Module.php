@@ -34,6 +34,7 @@ class Module extends BaseModule {
     /** @var array The rules to be used in URL management. */
     public $urlRules = [
         'paypal' => 'paypal/response',
+        'redsys' => 'redsys/response'
     ];
     public $logDir = '@runtime/payments';
     public $logDirPerms = 0755;

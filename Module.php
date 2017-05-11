@@ -35,5 +35,17 @@ class Module extends BaseModule {
     public $urlRules = [
         'paypal' => 'paypal/response',
     ];
+    public $logDir = '@runtime/payments';
+    public $logDirPerms = 0755;
+    public $mods;
+
+    public function getMod($mod) {
+        if (isset($this->mods[$mod][YII_ENV])) {
+            return $this->mods[$mod][YII_ENV];
+        } else {
+            //echo 'No existe';
+            return [];
+        }
+    }
 
 }

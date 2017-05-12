@@ -26,5 +26,5 @@ interface PaymentMethodInterface {
 
     public function getErrors();
     
-    public function proccess();
+    public function process();
 }

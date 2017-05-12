@@ -66,4 +66,13 @@ Class Redsys extends BaseMethod {
         }
     }
 
+    public function setItem($item) {
+        /*
+         * Redsys requires that item has between 4 and 12 positions
+         */
+        if (strlen($item) < 4) {
+            $this->item = str_pad($item, 4, 0, STR_PAD_LEFT);
+        }
+    }
+
 }

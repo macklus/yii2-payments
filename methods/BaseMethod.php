@@ -57,7 +57,7 @@ Class BaseMethod implements PaymentMethodInterface, EventsInterface {
         return $this->currency;
     }
 
-    public function proccess() {
+    public function process() {
         
     }
 

@@ -58,9 +58,12 @@ class PaypalController extends Controller implements EventsInterface {
                 //payment_status":"Completed
                 $status = $ipn->getKeyValue('payment_status');
 
-                foreach ($this->$_paypal_vars as $var) {
+                foreach ($this->_paypal_vars as $var) {
                     $event->setVar($var, $ipn->getKeyValue($var));
                 }
+                $event->status = $status;
+                $event->item = $ipn->getKeyValue('item_number');
+                $event->amount = $ipn->getKeyValue('quantity');
 
                 if ($status == 'Completed') {
                     file_put_contents($this->_log, 'PAGO COMPLETADO', FILE_APPEND);

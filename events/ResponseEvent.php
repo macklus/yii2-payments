@@ -6,6 +6,9 @@ use yii\base\Event;
 
 Class ResponseEvent extends Event {
 
+    public $status;
+    public $amount;
+    public $item;
     public $payment;
     private $_vars = [];
 

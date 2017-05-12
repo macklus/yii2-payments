@@ -57,7 +57,8 @@ class RedsysController extends Controller implements EventsInterface {
                 'signature' => $signature,
                 'key' => $key,
                 'firma' => $firma,
-                'decodec' => $decodec
+                'decodec' => $decodec,
+                'response' => $this->_obj->getParameter("Ds_Response")
             ]);
 
             if ($firma === $signature) {
@@ -67,6 +68,10 @@ class RedsysController extends Controller implements EventsInterface {
                 // Payment is valid
                 $codigoRespuesta = $this->_obj->getParameter("Ds_Response");
                 $event->setVar('codigoRespuesta', $codigoRespuesta);
+                $event->status = $codigoRespuesta;
+                $event->item = $this->_obj->getParameter('Ds_Order');
+                $event->amount = $this->_obj->getParameter("Ds_Response") / 100;
+
                 if (isset($codigoRespuesta) && (intval($codigoRespuesta) == 0)) {
                     // Payment OK !!!
                     file_put_contents($this->_log, " - Pago correcto\n", FILE_APPEND);

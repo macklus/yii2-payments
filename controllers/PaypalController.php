@@ -17,6 +17,13 @@ class PaypalController extends Controller implements EventsInterface {
 
     private $_module;
     private $_log;
+    private $_paypal_vars = ['payment_type', 'payment_date', 'payment_status', 'address_status',
+        'payer_status', 'first_name', 'last_name', 'payer_email', 'payer_id', 'address_name',
+        'address_country', 'address_country_code', 'address_zip', 'address_state', 'address_city',
+        'address_street', 'business', 'receiver_email', 'receiver_id', 'residence_country', 'item_name',
+        'item_number', 'quantity', 'shipping', 'tax', 'mc_currency', 'mc_fee', 'mc_gross', 'mc_gross_1',
+        'txn_type', 'txn_id', 'notify_version', 'custom', 'invoice', 'test_ipn', 'verify_sign'
+    ];
 
     public function __construct($id, $module, $config = []) {
         $this->_module = $module;
@@ -50,7 +57,10 @@ class PaypalController extends Controller implements EventsInterface {
 
                 //payment_status":"Completed
                 $status = $ipn->getKeyValue('payment_status');
-                $event->setVar('payment_status', $ipn->getKeyValue('payment_status'));
+
+                foreach ($this->$_paypal_vars as $var) {
+                    $event->setVar($var, $ipn->getKeyValue($var));
+                }
 
                 if ($status == 'Completed') {
                     file_put_contents($this->_log, 'PAGO COMPLETADO', FILE_APPEND);

@@ -4,10 +4,15 @@ namespace macklus\payments\controllers;
 
 use Yii;
 use yii\web\Controller;
-use macklus\payments\exceptions\InvalidLogDirectoryException;
 use c006\paypal_ipn\PayPal_Ipn;
+use macklus\payments\methods\Paypal;
+use macklus\payments\traits\EventTrait;
+use macklus\payments\traits\UtilsTrait;
 
 class PaypalController extends Controller {
+
+    use EventTrait;
+    use UtilsTrait;
 
     private $_module;
     private $_log;
@@ -26,20 +31,26 @@ class PaypalController extends Controller {
         $this->_fixErrorOnAlias();
         $this->_ensureLogDir();
 
+        $payment = new Paypal();
+        $payment->configure('paypal');
+
+        $event = $this->getResponseEvent($payment);
+
         $this->_log = Yii::getAlias($this->_module->logDir . '/paypal.log');
 
         file_put_contents($this->_log, "===================\n" . Yii::t('payments', 'New request') . "\n", FILE_APPEND);
 
         if (Yii::$app->request->isPost) {
             $paypal = $this->_module->getMod('paypal');
-            //$ipn = new PayPal_Ipn($paypal['live'], $paypal['debug']);
-            $ipn = new PayPal_Ipn(false, true);
+            $ipn = new PayPal_Ipn($paypal['live'], $paypal['debug']);
             if ($ipn->init()) {
                 // Log
                 file_put_contents($this->_log, print_R($ipn, true), FILE_APPEND);
 
                 //payment_status":"Completed
                 $status = $ipn->getKeyValue('payment_status');
+                $event->setVar('payment_status', $ipn->getKeyValue('payment_status'));
+
                 if ($status == 'Completed') {
                     file_put_contents($this->_log, 'PAGO COMPLETADO', FILE_APPEND);
                 } else {
@@ -53,22 +64,8 @@ class PaypalController extends Controller {
         /* Enable again if you use it */
         //Yii::$app->request->enableCsrfValidation = true;
         file_put_contents($this->_log, "===================\n", FILE_APPEND);
-    }
 
-    private function _fixErrorOnAlias() {
-        $exists = Yii::getAlias('@frontend', false);
-        if (!$exists) {
-            Yii::setAlias('@frontend', Yii::getAlias('@app'));
-        }
-    }
-
-    private function _ensureLogDir() {
-        $logDir = Yii::getAlias($this->_module->logDir);
-        if (!file_exists($logDir)) {
-            if (!mkdir($logDir, $this->_module->logDirPerms, true)) {
-                throw new InvalidLogDirectoryException();
-            }
-        }
+        $this->trigger(self::EVENT_RESPONSE, $event);
     }
 
 }

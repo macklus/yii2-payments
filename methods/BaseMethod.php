@@ -4,8 +4,9 @@ namespace macklus\payments\methods;
 
 use Yii;
 use macklus\payments\interfaces\PaymentMethodInterface;
+use macklus\payments\interfaces\EventsInterface;
 
-Class BaseMethod implements PaymentMethodInterface {
+Class BaseMethod implements PaymentMethodInterface, EventsInterface {
 
     public $amount;
     public $viewPath;

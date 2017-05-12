@@ -61,14 +61,16 @@ class PaypalController extends Controller implements EventsInterface {
                 foreach ($this->_paypal_vars as $var) {
                     $event->setVar($var, $ipn->getKeyValue($var));
                 }
-                $event->status = $status;
+
                 $event->item = $ipn->getKeyValue('item_number');
                 $event->amount = $ipn->getKeyValue('quantity');
 
                 if ($status == 'Completed') {
                     file_put_contents($this->_log, 'PAGO COMPLETADO', FILE_APPEND);
+                    $event->status = 'ok';
                 } else {
                     file_put_contents($this->_log, 'PAGO INCOMPLETO', FILE_APPEND);
+                    $event->status = 'error';
                 }
             } else {
                 file_put_contents($this->_log, "ERROR: ipn->init()", FILE_APPEND);

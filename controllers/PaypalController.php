@@ -8,8 +8,9 @@ use c006\paypal_ipn\PayPal_Ipn;
 use macklus\payments\methods\Paypal;
 use macklus\payments\traits\EventTrait;
 use macklus\payments\traits\UtilsTrait;
+use macklus\payments\interfaces\EventsInterface;
 
-class PaypalController extends Controller {
+class PaypalController extends Controller implements EventsInterface {
 
     use EventTrait;
     use UtilsTrait;

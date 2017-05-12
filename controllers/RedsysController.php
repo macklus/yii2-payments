@@ -8,8 +8,9 @@ use macklus\payments\lib\Redsys as RedSysObj;
 use macklus\payments\methods\creditcard\Redsys;
 use macklus\payments\traits\EventTrait;
 use macklus\payments\traits\UtilsTrait;
+use macklus\payments\interfaces\EventsInterface;
 
-class RedsysController extends Controller {
+class RedsysController extends Controller implements EventsInterface {
 
     use EventTrait;
     use UtilsTrait;
@@ -17,8 +18,6 @@ class RedsysController extends Controller {
     private $_module;
     private $_log;
     private $_obj;
-
-    const EVENT_RESPONSE = 'response';
 
     public function __construct($id, $module, $config = []) {
         $this->_module = $module;

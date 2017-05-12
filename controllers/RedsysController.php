@@ -70,7 +70,7 @@ class RedsysController extends Controller implements EventsInterface {
                 $event->setVar('codigoRespuesta', $codigoRespuesta);
                 $event->status = $codigoRespuesta;
                 $event->item = $this->_obj->getParameter('Ds_Order');
-                $event->amount = $this->_obj->getParameter("Ds_Response") / 100;
+                $event->amount = $this->_obj->getParameter("Ds_Amount") / 100;
 
                 if (isset($codigoRespuesta) && (intval($codigoRespuesta) == 0)) {
                     // Payment OK !!!

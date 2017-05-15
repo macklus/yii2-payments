@@ -13,6 +13,7 @@ Class Redsys extends BaseMethod {
     public $view = __DIR__ . '/../../views/redsys.php';
     protected $_merchantParameters;
     protected $_signature;
+    protected $order;
     protected $_accepted_vars = [
         'merchant', 'terminal', 'currency', 'transactionType', 'merchantURL',
         'urlOK', 'urlKO', 'urlPago', 'key', 'version', 'live',
@@ -68,11 +69,18 @@ Class Redsys extends BaseMethod {
 
     public function setItem($item) {
         /*
-         * Redsys requires that item has between 4 and 12 positions
+         * Redsys requires that item has:
+         * - between 4 and 12 positions
+         * - firts 4 positions as numeric
+         * 
+         * also, we expect our user set item as ID, so construct it
          */
-        if (strlen($item) < 4) {
-            $this->item = str_pad($item, 4, 0, STR_PAD_LEFT);
+        if (strlen($item) > 7) {
+            throw new Exception('too much characters on setItem');
         }
+
+        $tmp = 'i' . $item;
+        $this->item = substr(time(), 0, 12 - strlen($tmp));
     }
 
 }

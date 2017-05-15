@@ -69,7 +69,13 @@ class RedsysController extends Controller implements EventsInterface {
                 $codigoRespuesta = $this->_obj->getParameter("Ds_Response");
                 $event->setVar('codigoRespuesta', $codigoRespuesta);
 
-                $event->item = intval($this->_obj->getParameter('Ds_Order'));
+                if (preg_match('/\d+i(.*)/', $this->_obj->getParameter('Ds_Order'), $matches)) {
+                    if (isset($matches[1])) {
+                        $event->item = $matches[1];
+                    }
+                }
+                $event->item = $this->_obj->getParameter('Ds_Order');
+                file_put_contents($this->_log, "MI ID es: " . $event->item, FILE_APPEND);
                 $event->amount = intval($this->_obj->getParameter("Ds_Amount")) / 100;
 
                 if (isset($codigoRespuesta) && (intval($codigoRespuesta) == 0)) {

@@ -8,6 +8,7 @@ use macklus\payments\methods\BaseMethod;
 Class Redsys extends BaseMethod {
 
     protected $_obj;
+    public $item;
     public $params;
     public $signature;
     public $view = __DIR__ . '/../../views/redsys.php';
@@ -80,7 +81,7 @@ Class Redsys extends BaseMethod {
         }
 
         $tmp = 'i' . $item;
-        $this->item = substr(time(), 0, 12 - strlen($tmp));
+        $this->item = substr(time(), 0, 12 - strlen($tmp)) . $tmp;
     }
 
 }

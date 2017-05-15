@@ -70,8 +70,8 @@ class RedsysController extends Controller implements EventsInterface {
                 $event->setVar('codigoRespuesta', $codigoRespuesta);
 
                 if (preg_match('/\d+i(.*)/', $this->_obj->getParameter('Ds_Order'), $matches)) {
-                    if (isset($matches[2])) {
-                        $event->item = $matches[2];
+                    if (isset($matches[1])) {
+                        $event->item = $matches[1];
                     }
                 }
                 $event->item = $this->_obj->getParameter('Ds_Order');

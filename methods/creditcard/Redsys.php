@@ -31,7 +31,7 @@ Class Redsys extends BaseMethod {
     }
 
     public function process() {
-        $this->amount *= 100;
+        $this->amount = round( $this->amount, 2) * 100;
 
         $this->_obj = new RedSysObj();
 

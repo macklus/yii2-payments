@@ -10,6 +10,7 @@ Class BaseMethod implements PaymentMethodInterface, EventsInterface {
 
     public $amount;
     public $viewPath;
+    public $params;
     public $currency = 'EUR';
     protected $item = false;
     protected $_config;

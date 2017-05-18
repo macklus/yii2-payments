@@ -5,11 +5,11 @@ namespace macklus\payments\methods;
 Class Paypal extends BaseMethod {
 
     protected $_accepted_vars = [
-        'live', 'debug', 'bussines', 'url_ok', 'url_ko',
+        'live', 'debug', 'bussines', 'urlOK', 'urlKO',
         'item_name', 'submit', 'form_target'
     ];
     protected $_required_vars = [
-        'item_name', 'bussines', 'url_ok', 'url_ko', 'action', 'notify_url',
+        'item_name', 'bussines', 'action', 'notify_url',
     ];
 
     public function __construct() {

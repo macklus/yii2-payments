@@ -5,6 +5,12 @@
     <?php if ($payment->getParameter('item_name')) { ?>
         <input type="hidden" name="item_name" value="<?= $payment->getParameter('item_name'); ?>">
     <?php } ?>
+    <?php if ($payment->getParameter('urlOK')) { ?>
+        <input type="hidden" name="return" value="<?= $payment->getParameter('urlOK'); ?>">
+    <?php } ?>
+    <?php if ($payment->getParameter('urlOK')) { ?>
+        <input type="hidden" name="cancel_return" value="<?= $payment->getParameter('urlKO'); ?>">
+    <?php } ?>
     <input type="hidden" name="item_number" value="<?= $payment->getItem(); ?>">
     <input type="hidden" name="business" value="<?= $payment->getParameter('bussines'); ?>">
     <input type="hidden" name="notify_url" value="<?= $payment->getParameter('notify_url'); ?>">

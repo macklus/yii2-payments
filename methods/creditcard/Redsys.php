@@ -29,7 +29,7 @@ Class Redsys extends BaseMethod {
     }
 
     public function process() {
-        $this->amount = round( $this->amount, 2) * 100;
+        $this->amount = round($this->amount, 2) * 100;
 
         $this->_obj = new RedSysObj();
 
@@ -80,6 +80,10 @@ Class Redsys extends BaseMethod {
 
         $tmp = 'i' . $item;
         $this->item = substr(time(), 0, 12 - strlen($tmp)) . $tmp;
+    }
+    
+    public function setName($name) {
+        
     }
 
 }

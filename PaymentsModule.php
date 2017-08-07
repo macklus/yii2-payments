@@ -9,14 +9,15 @@
 
 namespace macklus\payments;
 
-use yii\base\Module as BaseModule;
+use yii\base\Module;
 
 /**
  * This is the main module class for the Yii2-payments.
  */
-class Module extends BaseModule {
+class PaymentsModule extends Module {
 
-    const VERSION = '0.0.1';
+    const NAME = 'payments';
+    const VERSION = '1.0.0';
 
     /**
      * @var string The prefix for user module URL.
@@ -39,6 +40,10 @@ class Module extends BaseModule {
     public $logDir = '@runtime/payments';
     public $logDirPerms = 0755;
     public $mods;
+    public $tables = [
+        'payment' => 'YiiPayment',
+        'response' => 'YiiPaymentResponse',
+    ];
 
     public function getMod($mod) {
         if (isset($this->mods[$mod][YII_ENV])) {

@@ -28,7 +28,7 @@ Usage
 Once the extension is installed, you should define their config, by define a payments component on your web.php, like:
 
 ```php
-'components' => [
+'modules' => [
     'payments' => [
         'dev' => [
             'paypal' => [

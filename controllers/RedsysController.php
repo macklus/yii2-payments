@@ -9,6 +9,7 @@ use macklus\payments\methods\creditcard\Redsys;
 use macklus\payments\traits\EventTrait;
 use macklus\payments\traits\UtilsTrait;
 use macklus\payments\interfaces\EventsInterface;
+use macklus\payments\models\PaymentResponse;
 
 class RedsysController extends Controller implements EventsInterface {
 
@@ -37,6 +38,10 @@ class RedsysController extends Controller implements EventsInterface {
         $this->_obj = new RedSysObj();
         $payment = new Redsys();
         $payment->configure('redsys');
+
+        $response = new PaymentResponse();
+        $response->provider = PaymentResponse::PROVIDER_REDSYS;
+        $response->recordRequest();
 
         $event = $this->getResponseEvent($payment);
 
@@ -70,6 +75,8 @@ class RedsysController extends Controller implements EventsInterface {
                 $event->setVar('codigoRespuesta', $codigoRespuesta);
 
                 $event->item = $this->_obj->getParameter('Ds_Order');
+                $response->item = $this->_obj->getParameter('Ds_Order');
+
                 if (preg_match('/\d+i(.*)/', $event->item, $matches)) {
                     if (isset($matches[1])) {
                         $event->item = $matches[1];
@@ -77,24 +84,29 @@ class RedsysController extends Controller implements EventsInterface {
                 }
 
                 $event->amount = intval($this->_obj->getParameter("Ds_Amount")) / 100;
+                $response->amount = intval($this->_obj->getParameter("Ds_Amount")) / 100;
 
                 if (isset($codigoRespuesta) && (intval($codigoRespuesta) == 0)) {
                     $event->status = 'ok';
+                    $response->status = PaymentResponse::STATUS_OK;
                     // Payment OK !!!
                     file_put_contents($this->_log, " - Pago correcto\n", FILE_APPEND);
                 } else {
                     $event->status = 'error';
+                    $response->status = PaymentResponse::STATUS_ERROR;
                     file_put_contents($this->_log, " - Pago incorrecto\n" . intval($decodec['Ds_Response']), FILE_APPEND);
                 }
             } else {
                 file_put_contents($this->_log, "ERROR DE FIRMAS\n $firma <> $signature", FILE_APPEND);
                 // Poner aqui la vista del error
+                $response->status = PaymentResponse::STATUS_ERROR;
             }
         }
 
         //Yii::$app->request->enableCsrfValidation = true;
         file_put_contents($this->_log, "===================\n", FILE_APPEND);
 
+        $response->save();
         $this->trigger(self::EVENT_RESPONSE, $event);
     }
 

@@ -9,6 +9,7 @@ use macklus\payments\methods\Paypal;
 use macklus\payments\traits\EventTrait;
 use macklus\payments\traits\UtilsTrait;
 use macklus\payments\interfaces\EventsInterface;
+use macklus\payments\models\PaymentResponse;
 
 class PaypalController extends Controller implements EventsInterface {
 
@@ -35,9 +36,13 @@ class PaypalController extends Controller implements EventsInterface {
         return parent::beforeAction($action);
     }
 
-    public function actionResponse() {
+    public function actionIndex() {
         $this->_fixErrorOnAlias();
         $this->_ensureLogDir();
+
+        $response = new PaymentResponse();
+        $response->provider = PaymentResponse::PROVIDER_PAYPAL;
+        $response->recordRequest();
 
         $payment = new Paypal();
         $payment->configure('paypal');
@@ -63,13 +68,18 @@ class PaypalController extends Controller implements EventsInterface {
                 }
 
                 $event->item = $ipn->getKeyValue('item_number');
-                $event->amount = $ipn->getKeyValue('quantity');
+                $event->amount = $ipn->getKeyValue('mc_gross');
+
+                $response->item = $ipn->getKeyValue('item_number');
+                $response->amount = $ipn->getKeyValue('mc_gross');
 
                 if ($status == 'Completed') {
                     file_put_contents($this->_log, 'PAGO COMPLETADO', FILE_APPEND);
+                    $response->status = PaymentResponse::STATUS_OK;
                     $event->status = 'ok';
                 } else {
                     file_put_contents($this->_log, 'PAGO INCOMPLETO', FILE_APPEND);
+                    $response->status = PaymentResponse::STATUS_ERROR;
                     $event->status = 'error';
                 }
             } else {
@@ -80,6 +90,11 @@ class PaypalController extends Controller implements EventsInterface {
         /* Enable again if you use it */
         //Yii::$app->request->enableCsrfValidation = true;
         file_put_contents($this->_log, "===================\n", FILE_APPEND);
+
+        if($response->save() !== true) {
+            print_R($response->getErrors());
+        }
+        
 
         $this->trigger(self::EVENT_RESPONSE, $event);
     }

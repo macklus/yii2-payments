@@ -57,16 +57,16 @@ class PaymentResponse extends \yii\db\ActiveRecord {
      */
     public function attributeLabels() {
         return [
-            'id' => Yii::t('payment', 'ID'),
-            'payment_id' => Yii::t('payment', 'Payment ID'),
-            'item' => Yii::t('payment', 'Item'),
-            'status' => Yii::t('payment', 'Status'),
-            'amount' => Yii::t('payment', 'Amount'),
-            'provider' => Yii::t('payment', 'Provider'),
-            'data' => Yii::t('payment', 'Data'),
-            'error_code' => Yii::t('payment', 'Error Code'),
-            'date_received' => Yii::t('payment', 'Date Received'),
-            'date_processed' => Yii::t('payment', 'Date Processed'),
+            'id' => Yii::t('payments', 'ID'),
+            'payment_id' => Yii::t('payments', 'Payment ID'),
+            'item' => Yii::t('payments', 'Item'),
+            'status' => Yii::t('payments', 'Status'),
+            'amount' => Yii::t('payments', 'Amount'),
+            'provider' => Yii::t('payments', 'Provider'),
+            'data' => Yii::t('payments', 'Data'),
+            'error_code' => Yii::t('payments', 'Error Code'),
+            'date_received' => Yii::t('payments', 'Date Received'),
+            'date_processed' => Yii::t('payments', 'Date Processed'),
         ];
     }
 

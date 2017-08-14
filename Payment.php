@@ -121,6 +121,10 @@ class Payment extends Object {
     public function getCurrency() {
         return $this->_provider->getCurrency();
     }
+    
+    public function getProvider() {
+        return $this->_provider;
+    }
 
     public function process() {
         if ($this->_payment->save() !== true) {

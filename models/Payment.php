@@ -12,6 +12,7 @@ use yii\db\Expression;
  *
  * @property int $id
  * @property string $code
+ * @property string $item
  * @property double $amount
  * @property string $provider
  * @property string $date_received
@@ -39,11 +40,12 @@ class Payment extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['amount', 'provider'], 'required'],
+            [['amount', 'provider', 'item'], 'required'],
             [['amount'], 'number'],
             [['provider'], 'string'],
             [['code', 'date_received', 'date_procesed', 'date_add', 'date_edit'], 'safe'],
             [['code'], 'string', 'max' => 32],
+            [['item'], 'string', 'max' => 255],
         ];
     }
 
@@ -54,6 +56,7 @@ class Payment extends \yii\db\ActiveRecord {
         return [
             'id' => Yii::t('payment', 'ID'),
             'code' => Yii::t('payment', 'Code'),
+            'code' => Yii::t('payment', 'Item'),
             'amount' => Yii::t('payment', 'Amount'),
             'provider' => Yii::t('payment', 'Provider'),
             'date_received' => Yii::t('payment', 'Date Received'),

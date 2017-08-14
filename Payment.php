@@ -29,6 +29,8 @@ class Payment extends Object {
     private $_payment;
     private $_provider;
     public $viewPath;
+    public $isDebug = false;
+    public $mode;
 
     public function init() {
         $this->viewPath = Yii::$app->getModule('payments')->viewPath;
@@ -41,11 +43,24 @@ class Payment extends Object {
             $this->_payment = PaymentModel::find()->code($current_payment)->one();
         } else {
             $this->_payment = new PaymentModel();
+            $this->_payment->save();
+            Yii::$app->session->set('current_payment_code', $this->_payment->code);
         }
+
+        // Warn about debug mode
+        if (YII_ENV == 'dev' || YII_DEBUG) {
+            $this->isDebug = true;
+        }
+        $this->mode = YII_ENV;
 
         $this->_payment->provider = $provider;
         $this->_provider = $this->_getInstanceOf($provider);
         $this->_provider->configure($provider);
+    }
+
+    public function end() {
+        $this->_payment->save();
+        Yii::$app->session->remove('current_payment_code');
     }
 
     private function _getInstanceOf($provider) {
@@ -77,7 +92,11 @@ class Payment extends Object {
     }
 
     public function setItem($item) {
-        $this->_provider->setItem($item);
+        do {
+            $this->_provider->setItem($item);
+            $exists = PaymentModel::find()->item($this->_provider->getItem())->one();
+        } while ($exists);
+        $this->_payment->item = $this->_provider->getItem();
     }
 
     public function getItem() {
@@ -114,6 +133,8 @@ class Payment extends Object {
     public function renderForm($file, $extra_params = []) {
         $params = [
             'payment' => $this,
+            'provider' => $this->_provider,
+            'database' => $this->_payment
         ];
         $params = array_merge($params, $extra_params);
 

@@ -60,4 +60,8 @@ class PaymentQuery extends \yii\db\ActiveQuery {
         return $this->andWhere(['code' => $code]);
     }
 
+    public function item($item) {
+        return $this->andWhere(['item' => $item]);
+    }
+
 }

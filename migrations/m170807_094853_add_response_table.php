@@ -14,6 +14,7 @@ class m170807_094853_add_response_table extends Migration {
         $this->createTable($this->response_table, [
             'id' => 'INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY',
             'payment_id' => 'INT(11) UNSIGNED',
+            'item' => 'VARCHAR(255) NOT NULL',
             'status' => 'ENUM("ok", "error", "unknow") NOT NULL DEFAULT "unknow"',
             'amount' => 'FLOAT(10, 2) NOT NULL',
             'provider' => 'ENUM("paypal", "redsys", "transfer") NOT NULL',

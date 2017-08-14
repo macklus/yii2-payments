@@ -33,9 +33,13 @@ Class BaseMethod implements PaymentMethodInterface, EventsInterface {
             $this->_config[$key] = $value;
         }
     }
-
+    
     public function getParameter($key) {
         return (isset($this->_config[$key]) ? $this->_config[$key] : false);
+    }
+    
+    public function getParameters() {
+        return $this->_config;
     }
 
     private function _var_is_accepted($var) {

@@ -41,15 +41,13 @@ class Bootstrap implements BootstrapInterface {
                 $app->urlManager->addRules([$rule], false);
             }
 
-            /*
-              if (!isset($app->get('i18n')->translations['payments*'])) {
-              $app->get('i18n')->translations['payments*'] = [
-              'class' => PhpMessageSource::className(),
-              'basePath' => __DIR__ . '/messages',
-              'sourceLanguage' => 'en-US'
-              ];
-              }
-             */
+            if (!isset($app->get('i18n')->translations['payments*'])) {
+                $app->get('i18n')->translations['payments*'] = [
+                    'class' => PhpMessageSource::className(),
+                    'basePath' => __DIR__ . '/messages',
+                    'sourceLanguage' => 'en-US'
+                ];
+            }
         }
     }
 

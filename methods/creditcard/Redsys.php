@@ -2,6 +2,7 @@
 
 namespace macklus\payments\methods\creditcard;
 
+use yii\base\Exception;
 use macklus\payments\lib\Redsys as RedSysObj;
 use macklus\payments\methods\BaseMethod;
 
@@ -78,12 +79,28 @@ Class Redsys extends BaseMethod {
             throw new Exception('too much characters on setItem');
         }
 
-        $tmp = 'i' . $item;
-        $this->item = substr(time(), 0, 12 - strlen($tmp)) . $tmp;
+        /*
+         * Redsys dont allow duplicate order numbers
+         * to avoid that, we generate a random string
+         */
+        $this->item = 'i' . $item;
+
+        $end = 12 - strlen($this->item);
+        for ($r = 1; $r <= $end; $r++) {
+            $this->item = rand(0, 9) . $this->item;
+        }
     }
-    
+
     public function setName($name) {
         
+    }
+
+    public function setUrlOK($url) {
+        $this->setParameter('urlOK', $url);
+    }
+
+    public function setUrlError($url) {
+        $this->setParameter('urlKO', $url);
     }
 
 }

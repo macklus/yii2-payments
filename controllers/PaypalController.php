@@ -67,11 +67,11 @@ class PaypalController extends Controller implements EventsInterface {
                     $event->setVar($var, $ipn->getKeyValue($var));
                 }
 
-                $event->item = $ipn->getKeyValue('item_name1');
-                $event->amount = $ipn->getKeyValue('mc_gross_1');
+                $event->item = $ipn->getKeyValue('item_number');
+                $event->amount = $ipn->getKeyValue('mc_gross');
 
-                $response->item = $ipn->getKeyValue('item_name1');
-                $response->amount = $ipn->getKeyValue('mc_gross_1');
+                $response->item = $ipn->getKeyValue('item_number');
+                $response->amount = $ipn->getKeyValue('mc_gross');
 
                 if ($status == 'Completed') {
                     file_put_contents($this->_log, 'PAGO COMPLETADO', FILE_APPEND);

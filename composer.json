@@ -12,7 +12,8 @@
     ],
     "require": {
         "yiisoft/yii2": "*",
-        "c006/yii2-paypal-ipn": "~1.0"
+        "c006/yii2-paypal-ipn": "~1.0",
+        "ramsey/uuid": "^3.0@dev"
     },
     "autoload": {
         "psr-4": {

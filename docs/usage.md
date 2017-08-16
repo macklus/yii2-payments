@@ -18,7 +18,7 @@ class SampleController extends \yii\base\Controller {
         $payment = new Payment();
         $payment->start(Payment::PROVIDER_PAYPAL);
         $payment->setAmount(12.34);
-        $payment->setName(Yii::t('erp', 'Pedido 123456789'));
+        $payment->setName(Yii::t('app', 'Pedido 123456789'));
         $payment->setItem('ADJCADFAD');
         $payment->setUrlOK('https://my.domain/url_ok_paypal');
         $payment->setUrlError('https://my.domain/url_error_paypal');

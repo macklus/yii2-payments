@@ -92,7 +92,7 @@ class PaypalController extends Controller implements EventsInterface {
         file_put_contents($this->_log, "===================\n", FILE_APPEND);
 
         if($response->save() !== true) {
-            print_R($response->getErrors());
+            //print_R($response->getErrors());
         }
         
 

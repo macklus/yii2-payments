@@ -30,7 +30,7 @@ class RedsysController extends Controller implements EventsInterface {
         return parent::beforeAction($action);
     }
 
-    public function actionResponse() {
+    public function actionIndex() {
         $this->_fixErrorOnAlias();
         $this->_ensureLogDir();
 

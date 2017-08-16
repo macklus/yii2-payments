@@ -31,6 +31,7 @@ class Payment extends Object {
     public $viewPath;
     public $isDebug = false;
     public $mode;
+    public $type;
 
     public function init() {
         $this->viewPath = Yii::$app->getModule('payments')->viewPath;
@@ -38,6 +39,7 @@ class Payment extends Object {
     }
 
     public function start($provider) {
+        $this->type = $provider;
         $current_payment = Yii::$app->session->get('current_payment_code', false);
         if ($current_payment) {
             $this->_payment = PaymentModel::find()->code($current_payment)->one();
@@ -92,10 +94,7 @@ class Payment extends Object {
     }
 
     public function setItem($item) {
-        do {
-            $this->_provider->setItem($item);
-            $exists = PaymentModel::find()->item($this->_provider->getItem())->one();
-        } while ($exists);
+        $this->_provider->setItem($item);
         $this->_payment->item = $this->_provider->getItem();
     }
 
@@ -121,6 +120,10 @@ class Payment extends Object {
 
     public function getCurrency() {
         return $this->_provider->getCurrency();
+    }
+    
+    public function getProvider() {
+        return $this->_provider;
     }
 
     public function process() {

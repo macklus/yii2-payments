@@ -54,15 +54,15 @@ class Payment extends \yii\db\ActiveRecord {
      */
     public function attributeLabels() {
         return [
-            'id' => Yii::t('payment', 'ID'),
-            'code' => Yii::t('payment', 'Code'),
-            'code' => Yii::t('payment', 'Item'),
-            'amount' => Yii::t('payment', 'Amount'),
-            'provider' => Yii::t('payment', 'Provider'),
-            'date_received' => Yii::t('payment', 'Date Received'),
-            'date_procesed' => Yii::t('payment', 'Date Procesed'),
-            'date_add' => Yii::t('payment', 'Date Add'),
-            'date_edit' => Yii::t('payment', 'Date Edit'),
+            'id' => Yii::t('payments', 'ID'),
+            'code' => Yii::t('payments', 'Code'),
+            'code' => Yii::t('payments', 'Item'),
+            'amount' => Yii::t('payments', 'Amount'),
+            'provider' => Yii::t('payments', 'Provider'),
+            'date_received' => Yii::t('payments', 'Date Received'),
+            'date_procesed' => Yii::t('payments', 'Date Procesed'),
+            'date_add' => Yii::t('payments', 'Date Add'),
+            'date_edit' => Yii::t('payments', 'Date Edit'),
         ];
     }
 

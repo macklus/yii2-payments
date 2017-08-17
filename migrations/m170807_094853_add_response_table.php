@@ -1,6 +1,6 @@
 <?php
 
-use macklus\payments\migrations\Migration;
+use macklus\payments\helpers\Migration;
 
 /**
  * Class m170807_094853_add_response_table

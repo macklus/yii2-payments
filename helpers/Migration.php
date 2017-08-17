@@ -1,6 +1,6 @@
 <?php
 
-namespace macklus\payments\migrations;
+namespace macklus\payments\helpers;
 
 use yii\db\Migration as YiiMigration;
 

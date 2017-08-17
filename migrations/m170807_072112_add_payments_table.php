@@ -1,6 +1,6 @@
 <?php
 
-use macklus\payments\migrations\Migration;
+use macklus\payments\helpers\Migration;
 
 /**
  * Class m170807_072112_add_payments_table

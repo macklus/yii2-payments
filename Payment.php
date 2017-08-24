@@ -10,7 +10,7 @@
 namespace macklus\payments;
 
 use Yii;
-use yii\base\Object;
+use yii\base\BaseObject;
 use yii\base\Exception;
 use macklus\payments\models\Payment as PaymentModel;
 use macklus\payments\methods\Paypal;
@@ -20,7 +20,7 @@ use macklus\payments\methods\Transfer;
 /**
  * 
  */
-class Payment extends Object {
+class Payment extends BaseObject {
 
     const PROVIDER_PAYPAL = 'paypal';
     const PROVIDER_REDSYS = 'redsys';

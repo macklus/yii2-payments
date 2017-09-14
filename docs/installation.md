@@ -1,5 +1,9 @@
 ## Installation
 
+Install of macklus/yii2-payments consists of two steps:
+
+### Step 1: Install through composer
+
 The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
 
 Either run
@@ -15,3 +19,11 @@ or add
 ```
 
 to the require section of your `composer.json` file.
+
+### Step 2: run migrations
+
+You need to install required tables, by running, from your framework directory:
+
+```
+php yii migrate/up --migrationPath=@vendor/macklus/yii2-payments/migrations/
+```

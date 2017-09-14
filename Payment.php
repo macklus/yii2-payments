@@ -10,7 +10,7 @@
 namespace macklus\payments;
 
 use Yii;
-use yii\base\Object;
+use yii\base\BaseObject;
 use yii\base\Exception;
 use macklus\payments\models\Payment as PaymentModel;
 use macklus\payments\methods\Paypal;
@@ -20,11 +20,7 @@ use macklus\payments\methods\Transfer;
 /**
  * 
  */
-class Payment extends Object {
-
-    const PROVIDER_PAYPAL = 'paypal';
-    const PROVIDER_REDSYS = 'redsys';
-    const PROVIDER_TRANSFER = 'transfer';
+class Payment extends BaseObject {
 
     private $_payment;
     private $_provider;
@@ -67,11 +63,11 @@ class Payment extends Object {
 
     private function _getInstanceOf($provider) {
         switch ($provider) {
-            case self::PROVIDER_PAYPAL:
+            case PaymentModel::PROVIDER_PAYPAL:
                 return new Paypal();
-            case self::PROVIDER_REDSYS;
+            case PaymentModel::PROVIDER_REDSYS;
                 return new Redsys();
-            case self::PROVIDER_TRANSFER:
+            case PaymentModel::PROVIDER_TRANSFER:
                 return new Transfer();
             default:
                 throw new Exception("Unknow provider $provider");

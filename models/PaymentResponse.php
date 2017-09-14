@@ -90,6 +90,15 @@ class PaymentResponse extends \yii\db\ActiveRecord {
             'get' => Yii::$app->request->get(),
             'post' => Yii::$app->request->post()
         ];
+        /*
+         * Try to encode response if not utf8
+         */
+        if (\Yii::$app->charset !== "utf-8") {
+            $encoding = Yii::$app->request->post('charset', 'windows-1252');
+            array_walk_recursive($data, function (&$value) use ($encoding) {
+                $value = mb_convert_encoding($value, 'UTF-8', $encoding);
+            });
+        }
         $this->data = Json::encode($data);
     }
 

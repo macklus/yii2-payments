@@ -5,6 +5,7 @@ namespace macklus\payments\methods;
 use Yii;
 use macklus\payments\interfaces\PaymentMethodInterface;
 use macklus\payments\interfaces\EventsInterface;
+use macklus\payments\exceptions\ConfigurationErrorException;
 
 Class BaseMethod implements PaymentMethodInterface, EventsInterface {
 
@@ -22,6 +23,10 @@ Class BaseMethod implements PaymentMethodInterface, EventsInterface {
     }
 
     public function configure($mod) {
+        if(!Yii::$app->hasModule('payments')) {
+            throw new ConfigurationErrorException();
+        }
+        
         $conf = Yii::$app->getModule('payments')->getMod($mod);
         foreach ($conf as $key => $value) {
             $this->setParameter($key, $value);

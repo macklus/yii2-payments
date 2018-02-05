@@ -1,12 +1,12 @@
 <?php
-
 namespace macklus\payments\methods\creditcard;
 
 use yii\base\Exception;
 use macklus\payments\lib\Redsys as RedSysObj;
 use macklus\payments\methods\BaseMethod;
 
-Class Redsys extends BaseMethod {
+Class Redsys extends BaseMethod
+{
 
     protected $_obj;
     public $signature;
@@ -24,17 +24,17 @@ Class Redsys extends BaseMethod {
         'urlOK', 'urlKO', 'urlPago', 'key'
     ];
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_config['version'] = 'HMAC_SHA256_V1';
         return parent::__construct();
     }
 
-    public function process() {
-        $this->amount = round($this->amount, 2) * 100;
-
+    public function process()
+    {
         $this->_obj = new RedSysObj();
 
-        $this->_obj->setParameter("DS_MERCHANT_AMOUNT", $this->getAmount());
+        $this->_obj->setParameter("DS_MERCHANT_AMOUNT", $this->getSaniticeAmount());
         $this->_obj->setParameter("DS_MERCHANT_ORDER", strval($this->item));
         $this->_obj->setParameter("DS_MERCHANT_MERCHANTCODE", $this->getParameter('merchant'));
         $this->_obj->setParameter("DS_MERCHANT_CURRENCY", $this->getCurrency());
@@ -48,15 +48,25 @@ Class Redsys extends BaseMethod {
         $this->_signature = $this->_obj->createMerchantSignature($this->getParameter('key'));
     }
 
-    public function getMerchantParameters() {
+    public function getSaniticeAmount()
+    {
+        $amount = $this->amount;
+        $amount = rount($amount, 2);
+        return $amount * 100;
+    }
+
+    public function getMerchantParameters()
+    {
         return $this->_merchantParameters;
     }
 
-    public function getSignature() {
+    public function getSignature()
+    {
         return $this->_signature;
     }
 
-    public function getCurrency() {
+    public function getCurrency()
+    {
         switch ($this->currency) {
             case 'EUR':
                 return 978;
@@ -67,7 +77,8 @@ Class Redsys extends BaseMethod {
         }
     }
 
-    public function setItem($item) {
+    public function setItem($item)
+    {
         /*
          * Redsys requires that item has:
          * - between 4 and 12 positions
@@ -91,16 +102,18 @@ Class Redsys extends BaseMethod {
         }
     }
 
-    public function setName($name) {
+    public function setName($name)
+    {
         
     }
 
-    public function setUrlOK($url) {
+    public function setUrlOK($url)
+    {
         $this->setParameter('urlOK', $url);
     }
 
-    public function setUrlError($url) {
+    public function setUrlError($url)
+    {
         $this->setParameter('urlKO', $url);
     }
-
 }

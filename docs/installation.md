@@ -15,7 +15,7 @@ php composer.phar require --prefer-dist macklus/yii2-payments "*"
 or add
 
 ```
-"macklus/yii2-payments": "~0.0.1"
+"macklus/yii2-payments": "~1.0"
 ```
 
 to the require section of your `composer.json` file.

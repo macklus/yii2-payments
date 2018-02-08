@@ -51,7 +51,7 @@ Class Redsys extends BaseMethod
     public function getSaniticeAmount()
     {
         $amount = $this->amount;
-        $amount = rount($amount, 2);
+        $amount = round($amount, 2);
         return $amount * 100;
     }
 

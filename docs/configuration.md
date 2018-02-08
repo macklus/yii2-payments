@@ -1,6 +1,10 @@
 # Configuration
 
-Once the extension is installed, you should define their config, by define a payments component on your web.php, like:
+**IMPORTANT:**
+
+You should configure your web and console files.
+
+Once the extension is installed, you should define their config, by define a payments component on your config files, like:
 
 ```php
 return [
@@ -51,6 +55,17 @@ return [
         ],
     ],
 ];
+
+```
+
+So far config array are too big, and you should config web and console files, it's 
+recommended put config array on external file (maybe in app\config\payments.php),
+and required it when necesary, as:
+
+```php
+'modules' => [
+        'payments' => require __DIR__ . '/payments.php',
+],
 
 ```
 

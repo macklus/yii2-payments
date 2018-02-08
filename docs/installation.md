@@ -20,7 +20,16 @@ or add
 
 to the require section of your `composer.json` file.
 
-### Step 2: run migrations
+### Step 2: configure
+
+You need to configure your app before running migrations, otherwise migrate hangs
+(because it cannot find table names).
+
+You can configure your app reading [Configuration](configuration.md), and be sure 
+of configure **web.php** and **console.php** files.
+
+
+### Step 3: run migrations
 
 You need to install required tables, by running, from your framework directory:
 

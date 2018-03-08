@@ -1,11 +1,12 @@
 <?php
-
 namespace macklus\payments\models;
 
 use Yii;
 use Ramsey\Uuid\Uuid;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
+use macklus\payments\interfaces\ConstantsProviderInterface;
+use macklus\payments\interfaces\ConstantsStatusInterface;
 
 /**
  * This is the model class for table "payment".
@@ -22,23 +23,22 @@ use yii\db\Expression;
  *
  * @property PaymentResponse[] $paymentResponses
  */
-class Payment extends \yii\db\ActiveRecord {
-
-    const PROVIDER_PAYPAL = 'paypal';
-    const PROVIDER_REDSYS = 'redsys';
-    const PROVIDER_TRANSFER = 'transfer';
+class Payment extends \yii\db\ActiveRecord implements ConstantsProviderInterface, ConstantsStatusInterface
+{
 
     /**
      * @inheritdoc
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return Yii::$app->getModule('payments')->tables['payment'];
     }
 
     /**
      * @inheritdoc
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['amount', 'provider', 'item'], 'required'],
             [['amount'], 'number'],
@@ -52,7 +52,8 @@ class Payment extends \yii\db\ActiveRecord {
     /**
      * @inheritdoc
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id' => Yii::t('payments', 'ID'),
             'code' => Yii::t('payments', 'Code'),
@@ -66,7 +67,8 @@ class Payment extends \yii\db\ActiveRecord {
         ];
     }
 
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             [
                 'class' => TimestampBehavior::className(),
@@ -80,7 +82,8 @@ class Payment extends \yii\db\ActiveRecord {
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getResponses() {
+    public function getResponses()
+    {
         return $this->hasMany(PaymentResponse::className(), ['payment_id' => 'id']);
     }
 
@@ -88,19 +91,20 @@ class Payment extends \yii\db\ActiveRecord {
      * @inheritdoc
      * @return PaymentQuery the active query used by this AR class.
      */
-    public static function find() {
+    public static function find()
+    {
         return new PaymentQuery(get_called_class());
     }
 
-    public function beforeSave($insert) {
+    public function beforeSave($insert)
+    {
         if ($insert) {
             // Define code
             do {
-                $this->code = strtoupper(Uuid::uuid4()->toString());
+                $this->code = substr(strtoupper(Uuid::uuid4()->toString()), 0, 32);
                 $exists = Payment::find()->code($this->code)->one();
             } while ($exists);
         }
         return parent::beforeSave($insert);
     }
-
 }

@@ -101,7 +101,7 @@ class Payment extends \yii\db\ActiveRecord implements ConstantsProviderInterface
         if ($insert) {
             // Define code
             do {
-                $this->code = strtoupper(Uuid::uuid4()->toString());
+                $this->code = substr(strtoupper(Uuid::uuid4()->toString()), 0, 32);
                 $exists = Payment::find()->code($this->code)->one();
             } while ($exists);
         }

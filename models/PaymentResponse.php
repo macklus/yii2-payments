@@ -1,9 +1,10 @@
 <?php
-
 namespace macklus\payments\models;
 
 use Yii;
 use yii\helpers\Json;
+use macklus\payments\interfaces\ConstantsProviderInterface;
+use macklus\payments\interfaces\ConstantsStatusInterface;
 
 /**
  * This is the model class for table "payment_response".
@@ -21,26 +22,22 @@ use yii\helpers\Json;
  *
  * @property Payment $payment
  */
-class PaymentResponse extends \yii\db\ActiveRecord {
-
-    const STATUS_OK = 'ok';
-    const STATUS_ERROR = 'error';
-    const STATUS_UNKNOW = 'unknow';
-    const PROVIDER_PAYPAL = 'paypal';
-    const PROVIDER_REDSYS = 'redsys';
-    const PROVIDER_TRANSFER = 'transfer';
+class PaymentResponse extends \yii\db\ActiveRecord implements ConstantsProviderInterface, ConstantsStatusInterface
+{
 
     /**
      * @inheritdoc
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return Yii::$app->getModule('payments')->tables['response'];
     }
 
     /**
      * @inheritdoc
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['payment_id'], 'integer'],
             [['status', 'item', 'provider', 'data'], 'string'],
@@ -55,7 +52,8 @@ class PaymentResponse extends \yii\db\ActiveRecord {
     /**
      * @inheritdoc
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id' => Yii::t('payments', 'ID'),
             'payment_id' => Yii::t('payments', 'Payment ID'),
@@ -73,7 +71,8 @@ class PaymentResponse extends \yii\db\ActiveRecord {
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPayment() {
+    public function getPayment()
+    {
         return $this->hasOne(Payment::className(), ['id' => 'payment_id']);
     }
 
@@ -81,11 +80,13 @@ class PaymentResponse extends \yii\db\ActiveRecord {
      * @inheritdoc
      * @return PaymentResponseQuery the active query used by this AR class.
      */
-    public static function find() {
+    public static function find()
+    {
         return new PaymentResponseQuery(get_called_class());
     }
 
-    public function recordRequest() {
+    public function recordRequest()
+    {
         $data = [
             'get' => Yii::$app->request->get(),
             'post' => Yii::$app->request->post()
@@ -101,5 +102,4 @@ class PaymentResponse extends \yii\db\ActiveRecord {
         }
         $this->data = Json::encode($data);
     }
-
 }

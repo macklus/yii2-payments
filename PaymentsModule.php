@@ -17,7 +17,7 @@ use yii\base\Module;
 class PaymentsModule extends Module {
 
     const NAME = 'payments';
-    const VERSION = '1.0.2';
+    const VERSION = '1.0.3';
 
     /**
      * @var string The prefix for user module URL.

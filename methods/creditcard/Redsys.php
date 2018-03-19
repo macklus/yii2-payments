@@ -52,7 +52,8 @@ Class Redsys extends BaseMethod
     {
         $amount = $this->amount;
         $amount = round($amount, 2);
-        return $amount * 100;
+        $amount = $amount * 100;
+        return intval($amount);
     }
 
     public function getMerchantParameters()

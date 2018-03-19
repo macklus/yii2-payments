@@ -1,5 +1,4 @@
 <?php
-
 namespace macklus\payments\controllers;
 
 use Yii;
@@ -11,7 +10,8 @@ use macklus\payments\traits\UtilsTrait;
 use macklus\payments\interfaces\EventsInterface;
 use macklus\payments\models\PaymentResponse;
 
-class RedsysController extends Controller implements EventsInterface {
+class RedsysController extends Controller implements EventsInterface
+{
 
     use EventTrait;
     use UtilsTrait;
@@ -20,17 +20,20 @@ class RedsysController extends Controller implements EventsInterface {
     private $_log;
     private $_obj;
 
-    public function __construct($id, $module, $config = []) {
+    public function __construct($id, $module, $config = [])
+    {
         $this->_module = $module;
         parent::__construct($id, $module, $config);
     }
 
-    public function beforeAction($action) {
+    public function beforeAction($action)
+    {
         $this->enableCsrfValidation = false;
         return parent::beforeAction($action);
     }
 
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $this->_fixErrorOnAlias();
         $this->_ensureLogDir();
 
@@ -94,7 +97,9 @@ class RedsysController extends Controller implements EventsInterface {
                 } else {
                     $event->status = 'error';
                     $response->status = PaymentResponse::STATUS_ERROR;
-                    file_put_contents($this->_log, " - Pago incorrecto\n" . intval($decodec['Ds_Response']), FILE_APPEND);
+                    $ds_response = isset($decodec['Ds_Response']) ? intval($decodec['Ds_Response']) : 'undefined';
+
+                    file_put_contents($this->_log, " - Pago incorrecto\n" . $ds_response, FILE_APPEND);
                 }
             } else {
                 file_put_contents($this->_log, "ERROR DE FIRMAS\n $firma <> $signature", FILE_APPEND);
@@ -109,5 +114,4 @@ class RedsysController extends Controller implements EventsInterface {
         $response->save();
         $this->trigger(self::EVENT_RESPONSE, $event);
     }
-
 }

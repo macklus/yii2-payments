@@ -9,13 +9,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require --prefer-dist macklus/yii2-payments "*"
+php composer.phar require --prefer-dist macklus/yii2-payments "~2.0"
 ```
 
 or add
 
 ```
-"macklus/yii2-payments": "~1.0"
+"macklus/yii2-payments": "~2.0"
 ```
 
 to the require section of your `composer.json` file.

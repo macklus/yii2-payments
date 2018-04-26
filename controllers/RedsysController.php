@@ -2,42 +2,23 @@
 namespace macklus\payments\controllers;
 
 use Yii;
-use yii\web\Controller;
+use macklus\payments\base\BaseController;
 use macklus\payments\lib\Redsys as RedSysObj;
 use macklus\payments\methods\creditcard\Redsys;
-use macklus\payments\traits\EventTrait;
-use macklus\payments\traits\UtilsTrait;
-use macklus\payments\interfaces\EventsInterface;
 use macklus\payments\models\PaymentResponse;
 
-class RedsysController extends Controller implements EventsInterface
+class RedsysController extends BaseController
 {
 
-    use EventTrait;
-    use UtilsTrait;
-
-    private $_module;
-    private $_log;
+    protected $_module;
     private $_obj;
-
-    public function __construct($id, $module, $config = [])
-    {
-        $this->_module = $module;
-        parent::__construct($id, $module, $config);
-    }
-
-    public function beforeAction($action)
-    {
-        $this->enableCsrfValidation = false;
-        return parent::beforeAction($action);
-    }
 
     public function actionIndex()
     {
-        $this->_fixErrorOnAlias();
-        $this->_ensureLogDir();
+        Yii::debug('RedsysController on macklus\payments', 'macklus\payments\RedsysController');
 
-        $this->_log = Yii::getAlias($this->_module->logDir . '/redsys.log');
+        $this->_fixErrorOnAlias();
+
         $this->_obj = new RedSysObj();
         $payment = new Redsys();
         $payment->configure('redsys');
@@ -48,7 +29,7 @@ class RedsysController extends Controller implements EventsInterface
 
         $event = $this->getResponseEvent($payment);
 
-        file_put_contents($this->_log, "===================\n" . Yii::t('payments', 'New request') . "\n", FILE_APPEND);
+        Yii::info(Yii::t('payments', 'New request'), 'macklus\payments\RedsysController');
 
         if (Yii::$app->request->isPost) {
             $version = Yii::$app->request->post("Ds_SignatureVersion");
@@ -70,8 +51,8 @@ class RedsysController extends Controller implements EventsInterface
             ]);
 
             if ($firma === $signature) {
-                file_put_contents($this->_log, " - Firma correcta\n", FILE_APPEND);
-                file_put_contents($this->_log, " - Datos: " . print_R($decodec, true), FILE_APPEND);
+                Yii::info(Yii::t('payments', 'Signature correct'), 'macklus\payments\RedsysController');
+                Yii::info(Yii::t('payments', 'Data') . ': ' . print_R($decodec, true), 'macklus\payments\RedsysController');
 
                 // Payment is valid
                 $codigoRespuesta = $this->_obj->getParameter("Ds_Response");
@@ -93,23 +74,22 @@ class RedsysController extends Controller implements EventsInterface
                     $event->status = 'ok';
                     $response->status = PaymentResponse::STATUS_OK;
                     // Payment OK !!!
-                    file_put_contents($this->_log, " - Pago correcto\n", FILE_APPEND);
+                    Yii::info(Yii::t('payments', 'Payment is correct'), 'macklus\payments\RedsysController');
                 } else {
                     $event->status = 'error';
                     $response->status = PaymentResponse::STATUS_ERROR;
                     $ds_response = isset($decodec['Ds_Response']) ? intval($decodec['Ds_Response']) : 'undefined';
 
-                    file_put_contents($this->_log, " - Pago incorrecto\n" . $ds_response, FILE_APPEND);
+                    Yii::warning(Yii::t('payments', 'Payment is WRONG') . ': ' . $ds_response, 'macklus\payments\RedsysController');
                 }
             } else {
-                file_put_contents($this->_log, "ERROR DE FIRMAS\n $firma <> $signature", FILE_APPEND);
+                Yii::warning(Yii::t('payments', 'WRONG signature:') . $firma . '<>' . $signature, 'macklus\payments\RedsysController');
                 // Poner aqui la vista del error
                 $response->status = PaymentResponse::STATUS_ERROR;
             }
+        } else {
+            Yii::error(Yii::t('payments', 'POST request expected'), 'macklus\payments\RedsysController');
         }
-
-        //Yii::$app->request->enableCsrfValidation = true;
-        file_put_contents($this->_log, "===================\n", FILE_APPEND);
 
         $response->save();
         $this->trigger(self::EVENT_RESPONSE, $event);

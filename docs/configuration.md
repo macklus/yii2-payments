@@ -80,6 +80,17 @@ Change only if you already has a /payments controller
 
 ---
 
+#### tables (Type: `array`)
+
+Define the name of database tables we use. 
+This config option accepts and array on format key - table name
+Acceptes keys are payment and response
+
+
+# Deprecated functions
+
+## Deprecated from 2.0.0
+
 #### logDir (Type: `string`, Default value: `@runtime/payments`)
 
 Define our log directory
@@ -92,9 +103,4 @@ Define our log directory permissions, if they need to be create.
 
 ---
 
-#### tables (Type: `array`)
-
-Define the name of database tables we use. 
-This config option accepts and array on format key - table name
-Acceptes keys are payment and response
 

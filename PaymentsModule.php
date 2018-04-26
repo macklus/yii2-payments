@@ -1,12 +1,10 @@
 <?php
-
 /*
  * This file is part of the Macklus Yii2-Payments project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace macklus\payments;
 
 use yii\base\Module;
@@ -14,10 +12,11 @@ use yii\base\Module;
 /**
  * This is the main module class for the Yii2-payments.
  */
-class PaymentsModule extends Module {
+class PaymentsModule extends Module
+{
 
     const NAME = 'payments';
-    const VERSION = '1.0.4';
+    const VERSION = '2.0.0';
 
     /**
      * @var string The prefix for user module URL.
@@ -34,18 +33,18 @@ class PaymentsModule extends Module {
 
     /** @var array The rules to be used in URL management. */
     public $urlRules = [
-        'paypal' => 'paypal/response',
-        'redsys' => 'redsys/response'
+        '<controller:.+>' => '<controller>/index',
     ];
-    public $logDir = '@runtime/payments';
-    public $logDirPerms = 0755;
+    public $logDir = 'deprecated';
+    public $logDirPerms = 'deprecated';
     public $mods;
     public $tables = [
         'payment' => 'YiiPayment',
         'response' => 'YiiPaymentResponse',
     ];
 
-    public function getMod($mod) {
+    public function getMod($mod)
+    {
         if (isset($this->mods[$mod][YII_ENV])) {
             return $this->mods[$mod][YII_ENV];
         } else {
@@ -53,5 +52,4 @@ class PaymentsModule extends Module {
             return [];
         }
     }
-
 }

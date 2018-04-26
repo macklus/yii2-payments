@@ -1,22 +1,16 @@
 <?php
-
 namespace macklus\payments\controllers;
 
 use Yii;
-use yii\web\Controller;
 use c006\paypal_ipn\PayPal_Ipn;
+use macklus\payments\base\BaseController;
 use macklus\payments\methods\Paypal;
-use macklus\payments\traits\EventTrait;
-use macklus\payments\traits\UtilsTrait;
-use macklus\payments\interfaces\EventsInterface;
 use macklus\payments\models\PaymentResponse;
 
-class PaypalController extends Controller implements EventsInterface {
+class PaypalController extends BaseController
+{
 
-    use EventTrait;
-    use UtilsTrait;
-
-    private $_module;
+    protected $_module;
     private $_log;
     private $_paypal_vars = ['payment_type', 'payment_date', 'payment_status', 'address_status',
         'payer_status', 'first_name', 'last_name', 'payer_email', 'payer_id', 'address_name',
@@ -26,17 +20,8 @@ class PaypalController extends Controller implements EventsInterface {
         'txn_type', 'txn_id', 'notify_version', 'custom', 'invoice', 'test_ipn', 'verify_sign'
     ];
 
-    public function __construct($id, $module, $config = []) {
-        $this->_module = $module;
-        parent::__construct($id, $module, $config);
-    }
-
-    public function beforeAction($action) {
-        $this->enableCsrfValidation = false;
-        return parent::beforeAction($action);
-    }
-
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $this->_fixErrorOnAlias();
         $this->_ensureLogDir();
 
@@ -91,12 +76,11 @@ class PaypalController extends Controller implements EventsInterface {
         //Yii::$app->request->enableCsrfValidation = true;
         file_put_contents($this->_log, "===================\n", FILE_APPEND);
 
-        if($response->save() !== true) {
+        if ($response->save() !== true) {
             //print_R($response->getErrors());
         }
-        
+
 
         $this->trigger(self::EVENT_RESPONSE, $event);
     }
-
 }

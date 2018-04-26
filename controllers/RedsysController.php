@@ -2,35 +2,17 @@
 namespace macklus\payments\controllers;
 
 use Yii;
-use yii\web\Controller;
+use macklus\payments\base\BaseController;
 use macklus\payments\lib\Redsys as RedSysObj;
 use macklus\payments\methods\creditcard\Redsys;
-use macklus\payments\traits\EventTrait;
-use macklus\payments\traits\UtilsTrait;
-use macklus\payments\interfaces\EventsInterface;
 use macklus\payments\models\PaymentResponse;
 
-class RedsysController extends Controller implements EventsInterface
+class RedsysController extends BaseController
 {
 
-    use EventTrait;
-    use UtilsTrait;
-
-    private $_module;
+    protected $_module;
     private $_log;
     private $_obj;
-
-    public function __construct($id, $module, $config = [])
-    {
-        $this->_module = $module;
-        parent::__construct($id, $module, $config);
-    }
-
-    public function beforeAction($action)
-    {
-        $this->enableCsrfValidation = false;
-        return parent::beforeAction($action);
-    }
 
     public function actionIndex()
     {
@@ -108,7 +90,6 @@ class RedsysController extends Controller implements EventsInterface
             }
         }
 
-        //Yii::$app->request->enableCsrfValidation = true;
         file_put_contents($this->_log, "===================\n", FILE_APPEND);
 
         $response->save();

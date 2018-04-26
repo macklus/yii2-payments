@@ -16,7 +16,7 @@ class PaymentsModule extends Module
 {
 
     const NAME = 'payments';
-    const VERSION = '1.0.4';
+    const VERSION = '2.0.0';
 
     /**
      * @var string The prefix for user module URL.
